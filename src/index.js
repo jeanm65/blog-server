@@ -9,25 +9,28 @@ const {
   getArticles,
 } = require("./controllers/article.controller");
 
-initDataBase();
+const init = async () => {
+  //----------connected to database before launching the server-------//
+  await initDataBase();
+  const PORT = 8082;
+  const app = express();
 
-const PORT = 8082;
+  //--------App config-------//
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+  app.use(cors());
+  app.use(express.static("public"));
 
-const app = express();
+  //--------Endpoints-------//
+  app.get("/articles", getArticle);
+  app.get("/articles/:id", getArticles);
+  app.post("/articles", createArticle);
+  app.put("/articles/:id", updateArticle);
+  app.delete("/articles/:id", deleteArticle);
 
-//--------App config-------//
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
-app.use(express.static("public"));
+  app.listen(PORT, () => {
+    console.log("server running at port", PORT);
+  });
+};
 
-//--------Endpoints-------//
-app.get("/articles", getArticle);
-app.get("/articles/:id", getArticles);
-app.post("/articles", createArticle);
-app.put("/articles/:id", updateArticle);
-app.delete("/articles/:id", deleteArticle);
-
-app.listen(PORT, () => {
-  console.log("server running at port", PORT);
-});
+init();
