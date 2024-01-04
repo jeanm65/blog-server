@@ -8,6 +8,7 @@ const {
   getArticle,
   getArticles,
 } = require("./controllers/article.controller");
+const articleRouter = require("./routes/article.route");
 
 const init = async () => {
   //----------connected to database before launching the server-------//
@@ -21,12 +22,7 @@ const init = async () => {
   app.use(cors());
   app.use(express.static("public"));
 
-  //--------Endpoints-------//
-  app.get("/articles", getArticle);
-  app.get("/articles/:id", getArticles);
-  app.post("/articles", createArticle);
-  app.put("/articles/:id", updateArticle);
-  app.delete("/articles/:id", deleteArticle);
+  app.use("/articles", articleRouter);
 
   app.listen(PORT, () => {
     console.log("server running at port", PORT);
