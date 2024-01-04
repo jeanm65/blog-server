@@ -1,33 +1,28 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
+const dotenv = require("dotenv");
 const initDataBase = require("./config/database");
-const {
-  createArticle,
-  deleteArticle,
-  updateArticle,
-  getArticle,
-  getArticles,
-} = require("./controllers/article.controller");
+const articleRouter = require("./routes/article.route");
 
-initDataBase();
+const init = async () => {
+  await dotenv.config({ path: path.join(__dirname, "..", ".env.local") });
+  //----------connected to database before launching the server-------//
+  await initDataBase();
+  const PORT = 8082;
+  const app = express();
 
-const PORT = 8082;
+  //--------App config-------//
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+  app.use(cors());
+  app.use(express.static("public"));
 
-const app = express();
+  app.use("/articles", articleRouter);
 
-//--------App config-------//
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
-app.use(express.static("public"));
+  app.listen(PORT, () => {
+    console.log("server running at port", PORT);
+  });
+};
 
-//--------Endpoints-------//
-app.get("/articles", getArticle);
-app.get("/articles/:id", getArticles);
-app.post("/articles", createArticle);
-app.put("/articles/:id", updateArticle);
-app.delete("/articles/:id", deleteArticle);
-
-app.listen(PORT, () => {
-  console.log("server running at port", PORT);
-});
+init();
