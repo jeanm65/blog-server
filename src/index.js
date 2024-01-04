@@ -1,16 +1,12 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
+const dotenv = require("dotenv");
 const initDataBase = require("./config/database");
-const {
-  createArticle,
-  deleteArticle,
-  updateArticle,
-  getArticle,
-  getArticles,
-} = require("./controllers/article.controller");
 const articleRouter = require("./routes/article.route");
 
 const init = async () => {
+  await dotenv.config({ path: path.join(__dirname, "..", ".env.local") });
   //----------connected to database before launching the server-------//
   await initDataBase();
   const PORT = 8082;
