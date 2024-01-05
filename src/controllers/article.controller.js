@@ -37,7 +37,7 @@ const updateArticle = async (req, res) => {
   return res.status(200).json({ success: true, article: updatedArticle });
 };
 
-const getArticles = async (req, res) => {
+const getArticle = async (req, res) => {
   try {
     const { id } = req.params;
     const getArticle = await Article.findById(id);
@@ -52,7 +52,7 @@ const getArticles = async (req, res) => {
   }
 };
 
-const getArticle = async (req, res) => {
+const getArticles = async (req, res) => {
   const articles = await Article.find({});
   return res.status(200).json({ success: true, articles });
 };
