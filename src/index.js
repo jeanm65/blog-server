@@ -4,6 +4,8 @@ const path = require("path");
 const dotenv = require("dotenv");
 const initDataBase = require("./config/database");
 const articleRouter = require("./routes/article.route");
+const authRouter = require("./routes/auth.route");
+const cookieParser = require("cookie-parser");
 
 const init = async () => {
   await dotenv.config({ path: path.join(__dirname, "..", ".env.local") });
@@ -17,8 +19,11 @@ const init = async () => {
   app.use(express.urlencoded({ extended: false }));
   app.use(cors());
   app.use(express.static("public"));
+  app.use(cookieParser());
 
   app.use("/articles", articleRouter);
+  app.use("/auth", authRouter);
+
 
   app.listen(PORT, () => {
     console.log("server running at port", PORT);
